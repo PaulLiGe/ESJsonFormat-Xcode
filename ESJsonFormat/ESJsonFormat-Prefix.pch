@@ -38,5 +38,6 @@
 #define ESJsonFormatPluginPath [[NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"Developer/Shared/Xcode/Plug-ins/ESJsonFormat.xcplugin"]
 
 #define ESUppercaseKeyWords @[@"id"]
+#define PGDescriptionKeyCustom @[@"description"]
 
 #endif

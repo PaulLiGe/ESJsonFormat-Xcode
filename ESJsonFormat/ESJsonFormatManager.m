@@ -49,8 +49,13 @@
     NSString *typeStr = @"NSString";
     //判断大小写
     if ([ESUppercaseKeyWords containsObject:key] && [ESJsonFormatSetting defaultSetting].uppercaseKeyWordForId) {
-        key = [key uppercaseString];
+        key = @"_id";
     }
+    
+    if ([PGDescriptionKeyCustom containsObject:key] && [ESJsonFormatSetting defaultSetting].uppercaseKeyWordForId) {
+        key = @"_description";
+    }
+    
     if ([value isKindOfClass:[NSString class]]) {
         return [NSString stringWithFormat:@"@property (nonatomic, %@) %@ *%@;",qualifierStr,typeStr,key];
     }else if([value isKindOfClass:[@(YES) class]]){
@@ -119,8 +124,13 @@
     NSString *typeStr = @"String?";
     //判断大小写
     if ([ESUppercaseKeyWords containsObject:key] && [ESJsonFormatSetting defaultSetting].uppercaseKeyWordForId) {
-        key = [key uppercaseString];
+        key = @"_id";
     }
+    
+    if ([PGDescriptionKeyCustom containsObject:key] && [ESJsonFormatSetting defaultSetting].uppercaseKeyWordForId) {
+        key = @"_description";
+    }
+    
     if ([value isKindOfClass:[NSString class]]) {
         return [NSString stringWithFormat:@"    var %@: %@",key,typeStr];
     }else if([value isKindOfClass:[@(YES) class]]){
@@ -172,6 +182,8 @@
         [result appendFormat:@"@implementation %@\n\n@end\n",classInfo.className];
     }
     
+    
+    
     if ([ESJsonFormatSetting defaultSetting].outputToFiles) {
         //headerStr
         NSMutableString *headerString = [NSMutableString stringWithString:[self dealHeaderStrWithClassInfo:classInfo type:@"m"]];
@@ -195,7 +207,7 @@
  *  @return
  */
 + (NSString *)parseClassHeaderContentForOjbcWithClassInfo:(ESClassInfo *)classInfo{
-    NSMutableString *result = [NSMutableString stringWithFormat:@"@interface %@ : NSObject\n",classInfo.className];
+    NSMutableString *result = [NSMutableString stringWithFormat:@"@interface %@ : NSObject  <YYModel>\n",classInfo.className];
     [result appendString:classInfo.propertyContent];
     [result appendString:@"\n@end"];
     
@@ -250,7 +262,10 @@
             result = [NSMutableString stringWithFormat:@"%@",[result substringToIndex:result.length-2]];
         }
         //append method content (objectClassInArray)
-        NSString *methodStr = [NSString stringWithFormat:@"\n+ (NSDictionary *)objectClassInArray{\n    return @{%@};\n}\n",result];
+        NSString *methodStr = [NSString stringWithFormat:@"\n+ (NSDictionary *)modelContainerPropertyGenericClass{\n    return @{%@};\n}\n",result];
+        
+        
+        
         return methodStr;
     }
 }
